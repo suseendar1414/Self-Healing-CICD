@@ -34,7 +34,7 @@ jobs:
         run: |
           curl -X POST "${{ secrets.N8N_WEBHOOK_URL }}" \
             -H "Content-Type: application/json" \
-            -H "x-webhook-secret: ${{ secrets.MYN8NSECRET }}" \
+            -H "x-webhook-secret: ${{ secrets.N8N_WEBHOOK_SECRET }}" \
             -d '{
               "run_id": "${{ github.run_id }}",
               "repo": "${{ github.repository }}",
