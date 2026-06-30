@@ -1,7 +1,7 @@
 const express = require('express');
 const http = require('http');
 
-const app = express();
+
 
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });
