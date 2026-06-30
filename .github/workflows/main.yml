@@ -1,7 +1,8 @@
+name: CI Pipeline
+
 on:
   push:
-    branches:
-      - main
+    branches: main
 
 jobs:
   build-and-test:
@@ -23,3 +24,22 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  notify-n8n-on-failure:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: failure()
+    steps:
+      - name: Notify n8n
+        run: |
+          curl -X POST "${{ secrets.N8N_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -H "x-webhook-secret: ${{ secrets.MYN8NSECRET }}" \
+            -d '{
+              "run_id": "${{ github.run_id }}",
+              "repo": "${{ github.repository }}",
+              "branch": "${{ github.ref_name }}",
+              "commit_sha": "${{ github.sha }}",
+              "actor": "${{ github.actor }}",
+              "event_name": "${{ github.event_name }}"
+            }'
